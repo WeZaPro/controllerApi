@@ -1,0 +1,18 @@
+[
+  {
+    "plate_str": "ขล6708",
+    "province_fullname": "ขอนแก่น",
+    "ch": "1",
+    "avg_conf": "0.8835405111312866",
+    "image": "https://apiController.wezaapidev.com/images/1757748037437-roi.jpg",
+    "timestamp": "2025-09-13T07:20:37.442Z"
+  },
+  {
+    "plate_str": "ขล6708",
+    "province_fullname": "ขอนแก่น",
+    "ch": "1",
+    "avg_conf": "0.8835405111312866",
+    "image": "https://ccd3443ac8b4.ngrok-free.app/images/1757748281951-roi.jpg",
+    "timestamp": "2025-09-13T07:24:41.956Z"
+  }
+]
