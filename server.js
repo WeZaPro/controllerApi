@@ -4,14 +4,15 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const { sendPlateToLine } = require("./lineBot");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
 
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = "https://apiController.wezaapidev.com";
 
 // หลังจากบันทึกไฟล์รูปเรียบร้อย
-const lineUserId = process.env.LINE_UID; // ใส่ userId หรือ groupId ของ OA
+const lineUserId = "U0a5d99211cce04ecbdfd7b500f675b42"; // ใส่ userId หรือ groupId ของ OA
 
 // สร้างโฟลเดอร์ images ถ้ายังไม่มี
 const uploadDir = path.join(__dirname, "images");
@@ -22,8 +23,30 @@ if (!fs.existsSync(uploadDir)) {
 // serve ไฟล์ static จากโฟลเดอร์ images
 app.use("/images", express.static(uploadDir));
 
+app.use(express.json()); // รองรับ JSON
+app.use(express.urlencoded({ extended: true })); // รองรับ form-urlencoded
+app.use(cors()); // ✅ เปิด CORS ทุก origin
+
 // สร้างโฟลเดอร์สำหรับ logs
 const logFile = path.join(__dirname, "logs.json");
+
+// ไฟล์สำหรับเก็บ log
+const lpr_logFile = path.join(__dirname, "lpr_logFile.json");
+
+// ฟังก์ชันเขียน log
+function save_LPR_Log(data) {
+  let logs = [];
+  if (fs.existsSync(lpr_logFile)) {
+    try {
+      logs = JSON.parse(fs.readFileSync(lpr_logFile, "utf-8").trim() || "[]");
+    } catch (err) {
+      console.error("❌ Error parsing log file:", err);
+      logs = [];
+    }
+  }
+  logs.push({ ...data, timestamp: new Date().toISOString() });
+  fs.writeFileSync(lpr_logFile, JSON.stringify(logs, null, 2));
+}
 
 // ฟังก์ชันเขียน log ลงไฟล์ JSON
 function saveLog(data) {
@@ -68,6 +91,24 @@ app.get("/", (req, res) => {
     status: "ok",
     message: "🚀 LPR API Server is running",
   });
+});
+
+app.post("/milesight", (req, res) => {
+  // บันทึกลงไฟล์
+  save_LPR_Log(req.body);
+  res.json({
+    status: "ok",
+    data: req.body,
+  });
+});
+
+// ✅ route ให้ frontend เรียกดู log
+app.get("/lpr_logs", (req, res) => {
+  if (!fs.existsSync(lpr_logFile)) {
+    return res.json([]);
+  }
+  const lpr_logs = JSON.parse(fs.readFileSync(lpr_logFile, "utf-8") || "[]");
+  res.json(lpr_logs);
 });
 
 // ✅ route สำหรับรับข้อมูลจากกล้อง LPR

@@ -3,8 +3,9 @@ require("dotenv").config(); // โหลด .env ไฟล์
 
 // config ของ LINE OA
 const config = {
-  channelAccessToken: process.env.CHANNEL_ACCESSTOKEN, // ใส่ Token ของ OA
-  channelSecret: process.env.CHANNEL_SECRET,
+  channelAccessToken:
+    "ER8oSzlDDk1H8HkkBNoyBUNntemq0GJdhVjnA3IVJMAh+PNOjFlHnVH95qmPJKu4co7EgKK2Pip86q52zMn8t1CNqAq+pofA3le3t0WmJsVg8V0Jqmhh0FKjXNb98ighg6CHJT4rvaEKd6H0UUM5zwdB04t89/1O/w1cDnyilFU=", // ใส่ Token ของ OA
+  channelSecret: "066c773739e78a25b5accfb2ac49dda7",
 };
 
 const client = new line.Client(config);

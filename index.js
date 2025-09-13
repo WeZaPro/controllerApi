@@ -21,6 +21,8 @@ if (!fs.existsSync(uploadDir)) {
 
 // serve ไฟล์ static จากโฟลเดอร์ images
 app.use("/images", express.static(uploadDir));
+app.use(express.json()); // รองรับ JSON
+app.use(express.urlencoded({ extended: true })); // รองรับ form-urlencoded
 
 // สร้างโฟลเดอร์สำหรับ logs
 const logFile = path.join(__dirname, "logs.json");
@@ -67,6 +69,13 @@ app.get("/", (req, res) => {
   res.json({
     status: "ok",
     message: "🚀 LPR API Server is running",
+  });
+});
+
+app.post("/milesight", (req, res) => {
+  res.json({
+    status: "ok",
+    data: req.body,
   });
 });
 
