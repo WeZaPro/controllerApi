@@ -79,6 +79,13 @@ app.post("/milesight", (req, res) => {
   });
 });
 
+app.post("/esp-send", (req, res) => {
+  res.json({
+    status: "ok",
+    data: req.body,
+  });
+});
+
 // ✅ route สำหรับรับข้อมูลจากกล้อง LPR
 app.post("/getData", upload.single("image"), async (req, res) => {
   try {
